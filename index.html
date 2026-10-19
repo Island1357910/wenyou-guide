@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文游指令使用教程</title>
+<style>
+  :root {
+    --bg: #e7efe8;
+    --paper: #f4f7f2;
+    --ink: #1c2b24;
+    --muted: #5d6d64;
+    --line: #c9d5cc;
+    --pine: #1f6a4a;
+    --pine-deep: #143d2c;
+    --moss: #e5f2ea;
+    --amber: #8a4b12;
+    --amber-bg: #fff1df;
+    --seal: #9f2d2d;
+    --seal-bg: #fdeceb;
+    --card: #fffcf7;
+    --shadow: 0 10px 30px rgba(28, 43, 36, 0.06);
+    --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "PMingLiU", serif;
+    --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(31, 106, 74, 0.08), transparent 28rem),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.75;
+  }
+  a { color: var(--pine-deep); }
+  a:hover { color: var(--pine); }
+  .wrap { width: min(880px, calc(100% - 28px)); margin: 0 auto; }
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(244, 247, 242, 0.92);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+  }
+  .top .wrap { display: flex; gap: 8px; align-items: center; min-height: 58px; overflow-x: auto; }
+  .brand { font-family: var(--serif); font-weight: 700; white-space: nowrap; margin-right: 8px; }
+  .top a {
+    text-decoration: none;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+  header.hero { padding: 42px 0 10px; }
+  .eyebrow {
+    letter-spacing: 0.18em;
+    font-size: 12px;
+    color: var(--pine);
+    font-weight: 700;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 6vw, 58px);
+    line-height: 1.15;
+    margin: 8px 0 12px;
+    font-weight: 700;
+  }
+  .lede { font-size: 18px; max-width: 40rem; margin: 0; }
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: 28px 0 8px;
+  }
+  .flow div {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px;
+    min-height: 108px;
+    box-shadow: var(--shadow);
+  }
+  .flow b { display: block; font-family: var(--serif); font-size: 18px; line-height: 1.3; }
+  .flow span { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
+  .n { color: var(--pine); font-size: 12px; letter-spacing: 0.08em; }
+  section { padding: 18px 0 8px; scroll-margin-top: 72px; }
+  h2 { scroll-margin-top: 72px; }
+  h2 {
+    font-family: var(--serif);
+    font-size: 30px;
+    margin: 18px 0 8px;
+  }
+  h3 { font-size: 18px; margin: 0 0 6px; }
+  .card, .warn, .ok, .api, .check {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .grid { display: grid; gap: 12px; }
+  .apps { grid-template-columns: 1.2fr 1fr 1fr; }
+  .tag {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--moss);
+    color: var(--pine-deep);
+  }
+  .tag.warn-tag { background: var(--seal-bg); color: var(--seal); }
+  .tag.amber-tag { background: var(--amber-bg); color: var(--amber); }
+  ul, ol { margin: 8px 0 0; padding-left: 1.2em; }
+  li + li { margin-top: 4px; }
+  .warn { background: var(--seal-bg); border-color: #f0c7c4; }
+  .ok { background: var(--moss); border-color: #c7e2d4; }
+  .steps { counter-reset: step; display: grid; gap: 10px; }
+  .steps article { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: start; }
+  .steps article::before {
+    counter-increment: step;
+    content: counter(step);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--pine-deep);
+    color: #fff;
+    font-family: var(--serif);
+    font-size: 20px;
+  }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button, .btn {
+    appearance: none;
+    border: 0;
+    background: var(--pine-deep);
+    color: #fff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  button.ghost, a.ghost {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  button:focus-visible, a:focus-visible, textarea:focus-visible {
+    outline: 3px solid #8dccaa;
+    outline-offset: 2px;
+  }
+  code, .mono {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 0.92em;
+    word-break: break-all;
+  }
+  .url {
+    background: #f6f1e8;
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin: 8px 0;
+  }
+  .apis { grid-template-columns: 1fr 1fr; }
+  .api h3 { font-family: var(--serif); font-size: 22px; }
+  .meta { color: var(--muted); font-size: 14px; margin: 0; }
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 12px;
+    font: inherit;
+    resize: vertical;
+    background: #fff;
+  }
+  #check-result { min-height: 1.5em; margin: 10px 0 0; }
+  #check-result.bad { color: var(--seal); }
+  #check-result.good { color: var(--pine-deep); }
+  #live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  footer { color: var(--muted); font-size: 13px; padding: 28px 0 48px; }
+  @media (max-width: 800px) {
+    .flow, .apps, .apis, .steps article { grid-template-columns: 1fr; }
+    .flow div { min-height: 0; }
+    h1 { font-size: 36px; }
+    body { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="wrap">
+    <div class="brand">使用教程</div>
+    <a href="#play">怎么玩</a>
+    <a href="#apps">用哪款软件</a>
+    <a href="#send">怎么发出去</a>
+    <a href="#paste">粘贴注意</a>
+    <a href="#preview">预览和点选</a>
+    <a href="#api">免费接口</a>
+  </div>
+</div>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">HTML 文游指令</div>
+    <h1>把整份指令发出去，在预览里点下一步。</h1>
+    <p class="lede">每份指令是一份完整的主持人规则。模型收到后，会回你一整页可以点的 HTML。你点页面上的选项，它会复制一句行动，再贴回输入框发送，下一回合才会发生。</p>
+    <div class="flow">
+      <div><div class="n">01</div><b>发出指令</b><span>发文件，或整段粘贴</span></div>
+      <div><div class="n">02</div><b>等它写完</b><span>生成中途不要预览</span></div>
+      <div><div class="n">03</div><b>打开预览</b><span>点 HTML 预览</span></div>
+      <div><div class="n">04</div><b>点选项</b><span>页面会复制行动</span></div>
+      <div><div class="n">05</div><b>贴回去发送</b><span>贴进当前软件的输入框</span></div>
+    </div>
+  </header>
+
+  <section id="play">
+    <h2>一轮是怎么走的</h2>
+    <div class="card">
+      <p>指令本身不需要安装。你只需要一个能聊天、并且能预览 HTML 的软件。</p>
+      <ol>
+        <li>新建一个空对话。游戏过程中不要换对话，换了之后规则和前面的情节都会丢掉。</li>
+        <li>把某一份 <code>.md</code> 指令完整发出去。推荐直接发文件。复制粘贴也可以，但手机上很容易少掉后半段。</li>
+        <li>等回复完全停住。回复里应是一整页 HTML。</li>
+        <li>点击 HTML 预览，进入这一回合的页面。</li>
+        <li>点地点、人物、选项或翻页。这些按钮会把对应行动复制出来。</li>
+        <li>回到软件输入框，把刚复制的内容粘贴进去并发送。模型这时才结算，并给出下一页。</li>
+      </ol>
+      <p>只打开预览、只翻着看，故事不会自己往下走。页面上如果写着「请粘贴到 DeepSeek 聊天输入框并发送」，手机上同样贴回你正在使用的 Chatbox 或 RikkaHub。</p>
+    </div>
+  </section>
+
+  <section id="apps">
+    <h2>用哪款软件</h2>
+    <div class="grid apps">
+      <article class="card">
+        <span class="tag">电脑</span>
+        <h3>DeepSeek 网页</h3>
+        <p>电脑浏览器打开 DeepSeek 就能玩，网页可以预览 HTML。这一步不用申请 API。</p>
+        <p><a href="https://chat.deepseek.com" target="_blank" rel="noopener">打开 chat.deepseek.com</a></p>
+      </article>
+      <article class="card">
+        <span class="tag warn-tag">手机不推荐</span>
+        <h3>手机版 DeepSeek</h3>
+        <p>手机 App 对整页 HTML 的预览不稳定，按钮经常点不开。手机请改用下面两款。</p>
+      </article>
+      <article class="card">
+        <span class="tag">手机 / 电脑</span>
+        <h3>Chatbox</h3>
+        <p>安卓、iPhone 和电脑都有。HTML 代码块生成完后，点 Artifact 或预览，可以全屏。官网：<a href="https://chatboxai.app/zh" target="_blank" rel="noopener">chatboxai.app</a></p>
+      </article>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <span class="tag">安卓</span>
+      <h3>RikkaHub</h3>
+      <p>安卓专用。html 代码块全部输出完毕后，代码块右上角会出现「预览」。字还在往外跳时不会出现这个按钮，避免打开半截页面。安装说明见 <a href="https://docs.rikka-ai.com/zh/download" target="_blank" rel="noopener">RikkaHub 文档</a>，安装包也可从 <a href="https://github.com/rikkahub/rikkahub/releases" target="_blank" rel="noopener">GitHub Releases</a> 下载。</p>
+      <p class="meta">iPhone 用 Chatbox。安卓两款都可以，RikkaHub 的预览按钮更直接。</p>
+    </div>
+  </section>
+
+  <section id="send">
+    <h2>把指令发出去</h2>
+    <div class="grid">
+      <article class="ok">
+        <h3>优先发文件</h3>
+        <ol>
+          <li>找到要玩的那一份，文件名类似 <code>温度借阅室_HTML恋爱文游指令.md</code>。</li>
+          <li>用微信文件、网盘、数据线或隔空投送，把这个 md 传到正在聊天的那台设备。</li>
+          <li>在 DeepSeek 网页、Chatbox 或 RikkaHub 里点附件，选中这份文件。</li>
+          <li>输入框里补一句：<code>请严格按照这份文件开始，只回复完整 HTML。</code></li>
+          <li>发送，然后等到回复停住。</li>
+        </ol>
+      </article>
+      <article class="card">
+        <h3>也可以整段复制</h3>
+        <ol>
+          <li>用系统自带的文件或备忘录打开 md，从第一行全选，复制。</li>
+          <li>回到聊天输入框，用下面说的「长按粘贴」，不要走输入法剪贴板。</li>
+          <li>粘贴后滑到最底下，确认能看到「现在开始」以及后面的收束句，再发送。</li>
+        </ol>
+        <p>Chatbox 遇到特别长的粘贴，有时会自动变成一个文件。这样可以直接发送。</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="paste">
+    <h2>手机粘贴容易缺后半段</h2>
+    <div class="warn">
+      <h3>不要用输入法里的剪贴板</h3>
+      <p>搜狗、百度、讯飞等输入法面板上的「剪贴板」，经常只留下开头几千字。指令后半段的人物、按钮规则和「现在开始」会消失。模型只看到半份规则时，页面会缺按钮，或者根本不按 HTML 回复。</p>
+      <ol>
+        <li>复制之后，点一下聊天输入框，让光标出现。</li>
+        <li>不要去点输入法候选栏、剪贴板小卡片或剪贴板历史。</li>
+        <li>在输入框的文字区域长按，等系统弹出「粘贴」。</li>
+        <li>点这个系统菜单里的「粘贴」。</li>
+        <li>滑到结尾核对。开头要有作品标题，结尾要有「现在开始」。少了任何一头，删掉重来，或改成发文件。</li>
+      </ol>
+    </div>
+    <div class="check" style="margin-top:12px">
+      <h3>粘贴前可以在这里粗查一次</h3>
+      <p class="meta">文字只留在这台设备的本页里，不会上传。查完可以清空。它只看字数、开头和有没有「现在开始」，不能代替你自己滑到文件最后一行。</p>
+      <textarea id="draft" placeholder="把准备发送的全文贴到这里"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button type="button" id="run-check">检查这段文字</button>
+        <button type="button" class="ghost" id="clear-check">清空</button>
+      </div>
+      <p id="check-result" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section id="preview">
+    <h2>生成完毕后再点预览</h2>
+    <div class="steps">
+      <article>
+        <div>
+          <h3>等回复停住</h3>
+          <p>光标还在跳、代码还在变长时，不要打开预览。半截 HTML 会是空白页或坏掉的按钮。</p>
+        </div>
+      </article>
+      <article>
+        <div>
+          <h3>按软件打开预览</h3>
+          <p>Chatbox：点这条消息里 html 的 Artifact 或预览，需要时再全屏。RikkaHub：点代码块右上角的「预览」。电脑 DeepSeek：在网页里打开这段 HTML 的预览；如果它已经直接渲染成可点击页面，就在那个页面里操作。</p>
+        </div>
+      </article>
+      <article>
+        <div>
+          <h3>点你要做的那一项</h3>
+          <p>地点、人物、关系、消息、翻页、返回和自定义行动，点下去都会复制一条请求。自定义行动要先写字再点。空白不会提交。</p>
+        </div>
+      </article>
+      <article>
+        <div>
+          <h3>贴回输入框再发送</h3>
+          <p>看到「指令已复制」后，回到同一个对话的输入框，仍然用长按粘贴，然后发送。自动复制失败时，预览页下方会留着完整原文，长按那段文字复制，再贴回去。不要只凭「好像选中了」就认为已经复制成功。</p>
+        </div>
+      </article>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h3>玩的时候会遇到的情况</h3>
+      <ul>
+        <li>预览是空白：多半是还没生成完，或这页 HTML 被截断。等停住后重开；仍然空白，就发送一句「上一次页面不完整，请只输出唯一完整的 html，不要在代码外面解释。」</li>
+        <li>点了选项，故事没变化：复制只发生在你的手机上。没有把那句行动发送出去，模型不会结算。</li>
+        <li>人物没有图片：指令里的图是电脑上的本地文件，聊天软件打不开。还没有公网图片地址时，页面用文字描写外貌，这是正常的。</li>
+        <li>聊到后面开始忘事、页面变短：上下文满了。换一个上下文更长的模型，并继续留在这个对话里。电脑上直接用 DeepSeek 网页最稳。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="api">
+    <h2>免费 API 怎么领</h2>
+    <div class="card">
+      <p>电脑玩 DeepSeek 网页，不需要 API。手机上的 Chatbox 和 RikkaHub 要自己填接口。网页能免费聊天，不等于开放平台的 API 也免费，两套额度互不相通。</p>
+      <p>每个平台最后都要拿到三样东西：<b>API Key</b>、<b>Base URL</b>、<b>模型 ID</b>。Key 相当于密码，只填进自己的软件，不要发到群里，也不要截图外传。</p>
+      <p class="meta">下面的额度和模型名核对于 2026-10-19 的公开说明。平台会改活动和免费名单，以你打开控制台时看到的为准。</p>
+    </div>
+
+    <h2>国内更容易接上的</h2>
+    <div class="grid apis">
+      <article class="api">
+        <span class="tag">有免费模型</span>
+        <h3>硅基流动</h3>
+        <p>注册并完成实名后，价格页标成「免费」的模型调用费用为 0，速度限制以模型广场为准。同名带 Pro 的版本是收费的。认证后另有限时代金券，活动写到 2026-12-31，那是赠金，不是免费模型本身。</p>
+        <ol>
+          <li>打开 <a href="https://cloud.siliconflow.cn" target="_blank" rel="noopener">cloud.siliconflow.cn</a> 注册。</li>
+          <li>按页面提示完成实名。</li>
+          <li>进入 <a href="https://cloud.siliconflow.cn/account/ak" target="_blank" rel="noopener">API 密钥</a>，新建一把 Key 并复制。</li>
+          <li>到模型广场，筛选价格为免费的模型，复制完整模型 ID。</li>
+        </ol>
+        <div class="url"><div class="meta">Base URL</div><div class="mono">https://api.siliconflow.cn/v1</div></div>
+        <button type="button" data-copy="https://api.siliconflow.cn/v1">复制地址</button>
+      </article>
+
+      <article class="api">
+        <span class="tag">有免费模型</span>
+        <h3>智谱 GLM</h3>
+        <p>开放平台里，GLM-4.7-Flash、GLM-4.5-Flash、GLM-4-Flash-250414 当时列为免费模型。GLM-5.3-Flash 是收费型号。模型 ID 要从价格页整段复制，不要凭记忆手打。</p>
+        <ol>
+          <li>打开 <a href="https://open.bigmodel.cn" target="_blank" rel="noopener">open.bigmodel.cn</a> 注册登录。</li>
+          <li>在个人中心的 API Keys 里创建密钥。</li>
+          <li>打开模型价格页，只选标为免费的模型，复制它的 ID。</li>
+        </ol>
+        <div class="url"><div class="meta">Base URL</div><div class="mono">https://open.bigmodel.cn/api/paas/v4</div></div>
+        <button type="button" data-copy="https://open.bigmodel.cn/api/paas/v4">复制地址</button>
+      </article>
+
+      <article class="api">
+        <span class="tag amber-tag">新人额度</span>
+        <h3>阿里云百炼</h3>
+        <p>新账号通常每个参与模型有约 100 万 Token，输入和输出一起算，90 天有效。这笔额度只认华北2（北京）地域的通用 API Key。控制台里打开「免费额度用完即停」，避免额度结束后继续扣费。</p>
+        <ol>
+          <li>用阿里云账号登录 <a href="https://bailian.console.aliyun.com" target="_blank" rel="noopener">百炼控制台</a>。</li>
+          <li>右上角确认地域是北京，再创建 API Key。</li>
+          <li>在模型页复制模型 ID，例如千问系列里你实际开通了免费额度的那个名字。</li>
+        </ol>
+        <div class="url"><div class="meta">北京地域 Base URL</div><div class="mono">https://dashscope.aliyuncs.com/compatible-mode/v1</div></div>
+        <button type="button" data-copy="https://dashscope.aliyuncs.com/compatible-mode/v1">复制地址</button>
+      </article>
+
+      <article class="api">
+        <span class="tag">每天补充</span>
+        <h3>魔搭 ModelScope</h3>
+        <p>每天有魔粒额度，绑定已实名的阿里云账号后还会再加一截。调用哪一个模型、一次扣多少，以推理页为准。要选带 API-Inference 的模型。</p>
+        <ol>
+          <li>登录 <a href="https://www.modelscope.cn" target="_blank" rel="noopener">modelscope.cn</a>。</li>
+          <li>在账号的访问令牌页复制 SDK Token，把它当作 API Key。</li>
+          <li>从支持 API 推理的模型页复制模型 ID。</li>
+        </ol>
+        <div class="url"><div class="meta">Base URL</div><div class="mono">https://api-inference.modelscope.cn/v1</div></div>
+        <button type="button" data-copy="https://api-inference.modelscope.cn/v1">复制地址</button>
+      </article>
+    </div>
+
+    <h2>能访问海外网站时</h2>
+    <div class="grid apis">
+      <article class="api">
+        <span class="tag">免费层</span>
+        <h3>Google Gemini</h3>
+        <p>用 Google 账号在 AI Studio 创建 Key。指定模型有免费层，每分钟、每天的次数按模型和地区变化，在 AI Studio 的限额页查看。Chatbox 和 RikkaHub 如果列表里已有 Gemini，直接选官方项并粘贴 Key，比手填兼容地址稳。</p>
+        <p><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">打开 AI Studio 创建 Key</a></p>
+        <div class="url"><div class="meta">要手填兼容地址时用</div><div class="mono">https://generativelanguage.googleapis.com/v1beta/openai/</div></div>
+        <button type="button" data-copy="https://generativelanguage.googleapis.com/v1beta/openai/">复制地址</button>
+      </article>
+      <article class="api">
+        <span class="tag">免绑卡</span>
+        <h3>Groq</h3>
+        <p>注册后在控制台创建 Key，不用信用卡。免费套餐按模型和账号限速，常见量级是每分钟约 30 次、每天约 1000 次，具体以 Limits 页面为准。模型 ID 从控制台复制。</p>
+        <p><a href="https://console.groq.com/keys" target="_blank" rel="noopener">打开 Groq 密钥页</a></p>
+        <div class="url"><div class="meta">Base URL</div><div class="mono">https://api.groq.com/openai/v1</div></div>
+        <button type="button" data-copy="https://api.groq.com/openai/v1">复制地址</button>
+      </article>
+      <article class="api">
+        <span class="tag">免费模型会轮换</span>
+        <h3>OpenRouter</h3>
+        <p>不充值也能用名字以 <code>:free</code> 结尾的模型，或 <code>openrouter/free</code>。未充值时大约每分钟 20 次、每天 50 次。在 RikkaHub 里如要求额外请求头，可加 <code>HTTP-Referer</code> 和 <code>X-Title</code>。</p>
+        <p><a href="https://openrouter.ai/keys" target="_blank" rel="noopener">打开 OpenRouter 密钥页</a></p>
+        <div class="url"><div class="meta">Base URL</div><div class="mono">https://openrouter.ai/api/v1</div></div>
+        <button type="button" data-copy="https://openrouter.ai/api/v1">复制地址</button>
+      </article>
+      <article class="api">
+        <span class="tag">每月免费层</span>
+        <h3>Mistral</h3>
+        <p>新账号默认 Free mode，不需要信用卡。在控制台创建 Key，到 Limits 看每个模型当月还剩多少。实验用额度，不适合当成长期不限额度。</p>
+        <p><a href="https://console.mistral.ai/api-keys/" target="_blank" rel="noopener">打开 Mistral 密钥页</a></p>
+        <div class="url"><div class="meta">Base URL</div><div class="mono">https://api.mistral.ai/v1</div></div>
+        <button type="button" data-copy="https://api.mistral.ai/v1">复制地址</button>
+      </article>
+    </div>
+
+    <h2>只有一笔赠金的</h2>
+    <div class="grid apis">
+      <article class="api">
+        <span class="tag amber-tag">一次性</span>
+        <h3>Kimi / Moonshot</h3>
+        <p>国内注册并认证后，新用户曾获 15 元代金券。券有有效期，而且不能用于 Kimi K3。用完就需要自己充值。适合先试手，不适合当作长期免费来源。</p>
+        <p><a href="https://platform.moonshot.cn/console/api-keys" target="_blank" rel="noopener">打开 Moonshot 控制台</a></p>
+        <div class="url"><div class="meta">Base URL</div><div class="mono">https://api.moonshot.cn/v1</div></div>
+        <button type="button" data-copy="https://api.moonshot.cn/v1">复制地址</button>
+      </article>
+      <article class="api">
+        <span class="tag amber-tag">网页免费，API 另算</span>
+        <h3>DeepSeek 开放平台</h3>
+        <p>电脑直接用 <a href="https://chat.deepseek.com" target="_blank" rel="noopener">chat.deepseek.com</a> 即可，不必为了玩文游去开 API。开放平台的聊天模型和网页聊天不是同一个额度。当前没有「所有新账号永久免费聊天 API」的官方说明。搜索接口的限时活动也不等于聊天模型免费。</p>
+        <p>如果以后自己充值再接入，地址是：</p>
+        <div class="url"><div class="mono">https://api.deepseek.com</div></div>
+        <button type="button" data-copy="https://api.deepseek.com">复制地址</button>
+      </article>
+    </div>
+
+    <h2>填进 Chatbox</h2>
+    <div class="card">
+      <ol>
+        <li>打开设置，进入模型提供方。</li>
+        <li>列表里已有硅基流动、DeepSeek、Gemini 时，直接点进去填 Key，再添加模型。不用重复建一个自定义项。</li>
+        <li>列表里没有的平台：点底部「添加」。名称自定，API 模式选「OpenAI API 兼容」。</li>
+        <li>填入 Key。API 主机和 API 路径要配成一对，填完点「检查」。</li>
+      </ol>
+      <div class="ok" style="margin-top:12px">
+        <p>路径框里如果已经是 <code>/v1/chat/completions</code>，主机只填域名，例如 <code>https://api.siliconflow.cn</code>，不要再加 <code>/v1</code>。</p>
+        <p>路径框里如果是 <code>/chat/completions</code>，主机要带上 <code>/v1</code>，例如 <code>https://api.siliconflow.cn/v1</code>。</p>
+        <p>检查失败时，把这两种拼法对调一次。智谱的主机例外，它的路径停在 <code>/api/paas/v4</code>，不要再额外拼一个 <code>/v1</code>。</p>
+      </div>
+      <p>保存后新建对话，在对话里选中刚加的模型，再按前面的步骤发送指令文件。</p>
+    </div>
+
+    <h2>填进 RikkaHub</h2>
+    <div class="card">
+      <ol>
+        <li>点侧边栏底部齿轮，进入提供商设置。</li>
+        <li>预设列表里有这个平台，就点进去粘贴 API Key。</li>
+        <li>没有的话，右上角新建提供商，类型选 OpenAI。接口保持 Chat Completions。</li>
+        <li>Base URL 填上面卡片里的完整地址，例如 <code>https://api.siliconflow.cn/v1</code>。这里要带 <code>/v1</code>，软件会自己补上后面的路径。智谱填 <code>https://open.bigmodel.cn/api/paas/v4</code>。</li>
+        <li>到页面底部的模型栏，能拉取列表就从列表里勾免费模型；拉不到就手动填模型 ID。</li>
+        <li>回到设置里的默认模型，把对话模型改成这一个。打开新对话后再发送指令。</li>
+      </ol>
+    </div>
+
+    <h2>哪种免费模型玩得动</h2>
+    <div class="card">
+      <p>每一回合都要写出一整页带样式和按钮的 HTML，还要记住开头那份很长的规则。参数很小的免费模型可以闲聊，却经常写到一半停住。</p>
+      <ul>
+        <li>先看上下文长度。指令本身就很长，窗口至少要有 64K，更长更好。</li>
+        <li>在免费名单里挑更大的模型，避开同名的 Pro、付费标记和需要充值才解锁的型号。</li>
+        <li>连续两次都输出半截页面时，换模型。电脑有条件时，直接改用 DeepSeek 网页。</li>
+        <li>免费层有每分钟次数和每天次数。文游一轮只发一条，一般够用；提示 429 或额度用尽时，等下一分钟，或换另一个平台的 Key。</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>本页是给人看的使用说明，不要把它当成文游指令发送。游戏进度只存在于你和模型的那一个对话里，软件不会自动替你保存存档。</p>
+    <p id="live" aria-live="polite"></p>
+  </footer>
+</div>
+<script>
+(function () {
+  var live = document.getElementById("live");
+  function say(text) { live.textContent = text; }
+
+  document.querySelectorAll("[data-copy]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var text = button.getAttribute("data-copy");
+      var done = function (ok) {
+        var old = button.textContent;
+        button.textContent = ok ? "已复制" : "请长按地址复制";
+        say(ok ? "地址已复制" : "自动复制失败");
+        setTimeout(function () { button.textContent = old; }, 1600);
+      };
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.left = "-9999px";
+      document.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(area);
+      if (ok) { done(true); return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      } else {
+        done(false);
+      }
+    });
+  });
+
+  var draft = document.getElementById("draft");
+  var result = document.getElementById("check-result");
+  document.getElementById("clear-check").addEventListener("click", function () {
+    draft.value = "";
+    result.textContent = "";
+    result.className = "";
+  });
+  document.getElementById("run-check").addEventListener("click", function () {
+    var text = draft.value.replace(/^\uFEFF/, "").trim();
+    var issues = [];
+    if (!text) {
+      result.className = "bad";
+      result.textContent = "先把准备发送的全文贴进来。";
+      return;
+    }
+    var length = Array.from(text).length;
+    var head = text.slice(0, 500);
+    var tail = text.slice(-1200);
+    if (length < 4000) issues.push("只有约 " + length + " 字，正常指令远比这长，很像只复制了开头。");
+    else if (length < 8000) issues.push("大约 " + length + " 字，偏短。请再对一下文件最后一行。");
+    if (!/指令|主持|HTML/.test(head)) issues.push("开头不像文游指令，请从文件第一行重新全选。");
+    if (text.indexOf("现在开始") === -1) issues.push("全文里没有「现在开始」。输入法剪贴板经常在这一节之前截断。");
+    else if (!/[。！？`）)】]$/.test(tail.trim())) issues.push("结尾停在半句上，后半段可能不完整。");
+    if (issues.length) {
+      result.className = "bad";
+      result.textContent = issues.join(" ");
+    } else {
+      result.className = "good";
+      result.textContent = "粗查通过：约 " + length + " 字，开头和「现在开始」都在。发送前仍建议滑到输入框最底部看一眼最后一句。";
+    }
+    say(result.textContent);
+  });
+})();
+</script>
+</body>
+</html>
