@@ -208,6 +208,7 @@
     <a href="#paste">粘贴注意</a>
     <a href="#preview">预览和点选</a>
     <a href="#api">免费接口</a>
+    <a href="#free-image-api">免费生图额度</a>
   </div>
 </div>
 <div class="wrap">
@@ -377,6 +378,16 @@
     </div>
   </section>
 
+
+  <section id="free-image-api"><h2>免费生图 API 与额度怎么开通</h2><div class="card">
+    <p class="meta">官方资料核对于 2026-10-26。免费名单、实名要求和额度会调整，使用前以自己的控制台为准。</p>
+    <h3>先试硅基流动 Kolors</h3><p><a href="https://siliconflow.cn/pricing" target="_blank" rel="noopener">官方价格页</a>目前将 <code>Kwai-Kolors/Kolors</code> 标为免费；需完成实名认证，仍有每分钟和每日用量限制。<a href="https://docs.siliconflow.cn/docs/userguide/faqs/rate-limit-and-upgradation" target="_blank" rel="noopener">官方限额规则</a>。</p>
+    <ol><li>打开 <a href="https://cloud.siliconflow.cn" target="_blank" rel="noopener">硅基流动控制台</a>注册，按提示完成实名认证。</li><li>进入“API 密钥”，新建并保存密钥，不要公开或发给别人。</li><li>模型广场找到 <code>Kwai-Kolors/Kolors</code>，再次核对标价免费，查看 Rate Limits 中 IPM / IPD。具体限额以该模型、该账号当前显示为准，不能当作无限免费。</li><li>牛油果 → 在线游玩 → 剧情自动配图 → 新增 API，用途选“生图”；基础地址填 <code>https://api.siliconflow.cn/v1</code>，密钥填自己的 Key。</li><li>点击“拉取模型”，选择 <code>Kwai-Kolors/Kolors</code> 并保存。列表没有时检查实名、权限与公告，不要直接换成收费模型。</li><li>可先在“故事生图”手动试一张，成功后开启剧情配图，建议每3回合最多1张、上限5或10次。</li></ol>
+    <h3>怎么查看和等待额度恢复</h3><p>模型详情的 IPM 是每分钟图片限制，IPD 是每日图片限制；账单/用量页可查看调用记录。遇到429先停止尝试，按服务商提示等待恢复，不擅自假定北京时间零点刷新。本站还有独立限制：每账号每10分钟最多6次生图请求、全站同时1路，通道忙或未到配图频率直接跳过，不自动补画。</p>
+    <p>免费模型和新手赠金不同：免费模型按当时标价费用为0；赠金有金额与有效期，用完可能收费。网页会员或聊天免费额度不等于生图API额度。不要把“每天若干次推理调用”误写成“每天同样张数的免费图片”。服务商自带AI生成标识保留，图片及时下载保存。<a href="https://api-docs.siliconflow.cn/docs/api/images-generations-post" target="_blank" rel="noopener">官方生图接口说明</a>。</p>
+    <p>其他来源：Hugging Face 免费账号每月有0.10美元推理额度，官方注明可能调整；其文生图接口不等于本站当前的Images格式，暂不作为直接接入方案。<a href="https://huggingface.co/docs/inference-providers/pricing" target="_blank" rel="noopener">额度说明</a>、<a href="https://huggingface.co/docs/inference-providers/en/index" target="_blank" rel="noopener">接口说明</a>。本站已按硅基流动公开格式做兼容，尚未用真实账号密钥实测。</p>
+  </div></section>
+
   <section id="api">
     <h2>免费 API 怎么领</h2>
     <div class="card">
@@ -390,7 +401,7 @@
       <article class="api">
         <span class="tag">有免费模型</span>
         <h3>硅基流动</h3>
-        <p>注册并完成实名后，价格页标成「免费」的模型调用费用为 0，速度限制以模型广场为准。同名带 Pro 的版本是收费的。认证后另有限时代金券，活动写到 2026-12-31，那是赠金，不是免费模型本身。</p>
+        <p>注册并完成实名后，价格页标成「免费」的模型调用费用为 0，速度限制以模型广场为准。同名带 Pro 的版本是收费的。新手赠金是否发放、金额和有效期以控制台为准，赠金不能当作长期免费模型。</p>
         <ol>
           <li>打开 <a href="https://cloud.siliconflow.cn" target="_blank" rel="noopener">cloud.siliconflow.cn</a> 注册。</li>
           <li>按页面提示完成实名。</li>
